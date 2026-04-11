@@ -1,3 +1,5 @@
+const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -26,21 +28,46 @@ app.use('/api/', limiter);
 // Routes
 app.use('/api/merge', mergeRouter);
 
-// Serve Static Frontend (in Production)
-const path = require('path');
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use((req, res, next) => {
-    if (req.path.startsWith('/api')) return next();
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Basic Health Check
+// Health Check
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Debug Route
+app.get('/debug', (req, res) => {
+    const publicDir = path.join(__dirname, 'public');
+    const assetsDir = path.join(publicDir, 'assets');
+    
+    let publicFiles = [];
+    let assetFiles = [];
+    
+    try {
+        if (fs.existsSync(publicDir)) {
+            publicFiles = fs.readdirSync(publicDir);
+        }
+        if (fs.existsSync(assetsDir)) {
+            assetFiles = fs.readdirSync(assetsDir);
+        }
+        res.json({ publicDir, assetsDir, publicFiles, assetFiles });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Serve Static Frontend (in Production)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Catch-all must be LAST
+app.get('*', (req, res) => {
+    const indexPath = path.join(__dirname, 'public', 'index.html');
+    if (fs.existsSync(indexPath)) {
+        res.sendFile(indexPath);
+    } else {
+        res.status(500).send('Frontend build not found. Ensure the client is built and copied to server/public.');
+    }
+});
+
 // Start Server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`MergeForge Backend running on port ${PORT}`);
 });
