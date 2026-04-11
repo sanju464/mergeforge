@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Merge Forge — File conversion and merging</title>
+    <meta name="description" content="Merge Forge is a client-side file conversion and merging tool. Merge PDFs, convert images, package ZIPs — directly in your browser. No uploads." />
+    <meta name="theme-color" content="#0f0f0f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+    <!-- Conversion libraries — loaded async so UI renders immediately.
+         A readiness poll in App.jsx gates the action button until all three are ready. -->
+    <script async src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
