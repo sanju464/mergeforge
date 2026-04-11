@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     libreoffice-java-common \
     qpdf \
     fonts-liberation \
-    ttf-mscorefonts-installer \
+    fonts-freefont-ttf \
     ca-certificates \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
